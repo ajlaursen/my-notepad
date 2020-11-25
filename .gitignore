@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# misc files in editor not needed for app
+misc/
