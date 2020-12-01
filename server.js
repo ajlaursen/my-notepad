@@ -11,14 +11,9 @@ app.use(express.urlencoded({ extend: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-
 // server paths
 app.get("/notes", function (req, res) {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
-});
-
-app.get("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
 // grabs information from db.json file
@@ -57,6 +52,11 @@ app.delete("/api/notes/:id", function (req, res) {
       return res.json(updatedArray);
     });
   });
+});
+
+// moved to bottom because it was running before other gets were running 
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
 // where server is listening
