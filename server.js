@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+// random id generator
 const { v4: uuidv4 } = require("uuid");
 
 const app = express();
@@ -10,14 +11,17 @@ app.use(express.urlencoded({ extend: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.get("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
-});
 
+// server paths
 app.get("/notes", function (req, res) {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "/public/index.html"));
+});
+
+// grabs information from db.json file
 app.get("/api/notes", function (req, res) {
   fs.readFile("./db/db.json", "utf8", function (err, data) {
     if (err) throw err;
@@ -26,6 +30,7 @@ app.get("/api/notes", function (req, res) {
   });
 });
 
+// writes new information to db.json file
 app.post("/api/notes", function (req, res) {
   const newNote = { ...req.body, id: uuidv4() };
   fs.readFile("./db/db.json", "utf8", function (err, data) {
@@ -40,6 +45,7 @@ app.post("/api/notes", function (req, res) {
   });
 });
 
+// deletes file from db.json using randomly generated ID
 app.delete("/api/notes/:id", function (req, res) {
   fs.readFile("./db/db.json", "utf8", function (err, data) {
     if (err) throw err;
@@ -53,6 +59,7 @@ app.delete("/api/notes/:id", function (req, res) {
   });
 });
 
+// where server is listening
 app.listen(PORT, function () {
   console.log("App listening on PORT " + PORT);
 });
